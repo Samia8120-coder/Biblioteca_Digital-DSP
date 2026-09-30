@@ -1,0 +1,6 @@
+storage:
+  diretorio_metadados: "./storage/metadata"
+
+logging:
+  arquivo: "./storage/logs/sistema.log"
+  nivel: "INFO"
