@@ -1,4 +1,7 @@
 .venv/
 __pycache__/
 storage/logs/
+storage/backups/
+storage/exports/
 .pytest_cache/
+*.tmp
