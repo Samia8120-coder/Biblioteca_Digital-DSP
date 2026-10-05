@@ -1,5 +1,8 @@
 storage:
+  diretorio_documentos: "./storage/documentos"
   diretorio_metadados: "./storage/metadata"
+  diretorio_backups: "./storage/backups"
+  diretorio_exports: "./storage/exports"
 
 logging:
   arquivo: "./storage/logs/sistema.log"
