@@ -8,7 +8,9 @@ from fastapi import UploadFile
 from core.config import DIRETORIO_DOCUMENTOS
 from core.logging_config import logger
 
+
 TAMANHO_BLOCO = 8192
+
 
 def salvar_arquivo(arquivo: UploadFile, documento_id: int) -> dict:
     DIRETORIO_DOCUMENTOS.mkdir(parents=True, exist_ok=True)
@@ -16,10 +18,10 @@ def salvar_arquivo(arquivo: UploadFile, documento_id: int) -> dict:
     nome_original = arquivo.filename
     extensao = Path(nome_original).suffix
     nome_armazenado = f"{documento_id}_{nome_original}"
-    caminho_destino = DIRETORIO_DOCUMENTOS/nome_armazenado
+    caminho_destino = DIRETORIO_DOCUMENTOS / nome_armazenado
 
     hash_sha256 = hashlib.sha256()
-    tamaho = 0
+    tamanho = 0
 
     with open(caminho_destino, "wb") as destino:
         while True:
@@ -36,7 +38,7 @@ def salvar_arquivo(arquivo: UploadFile, documento_id: int) -> dict:
         "Arquivo salvo: id=%s, nome_armazenado=%s, tamanho=%d",
         documento_id,
         nome_armazenado,
-        tamaho,
+        tamanho,
     )
 
     return {
@@ -49,8 +51,9 @@ def salvar_arquivo(arquivo: UploadFile, documento_id: int) -> dict:
         "data_upload": datetime.now().isoformat(timespec="seconds"),
     }
 
+
 def calcular_hash_atual(nome_armazenado: str) -> str | None:
-    caminho = DIRETORIO_DOCUMENTOS/nome_armazenado
+    caminho = DIRETORIO_DOCUMENTOS / nome_armazenado
 
     if not caminho.exists():
         return None
@@ -66,14 +69,16 @@ def calcular_hash_atual(nome_armazenado: str) -> str | None:
 
     return hash_sha256.hexdigest()
 
+
 def remover_arquivo(nome_armazenado: str) -> bool:
-    caminho = DIRETORIO_DOCUMENTOS
+    caminho = DIRETORIO_DOCUMENTOS / nome_armazenado
 
     if not caminho.exists():
         return False
 
-    caminho.unlike()
+    caminho.unlink()
     return True
 
+
 def caminho_do_arquivo(nome_armazenado: str) -> Path:
-    return DIRETORIO_DOCUMENTOS/nome_armazenado
+    return DIRETORIO_DOCUMENTOS / nome_armazenado
