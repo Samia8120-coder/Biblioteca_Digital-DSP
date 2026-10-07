@@ -1,87 +1,19 @@
-import hashlib
-import mimetypes
-from datetime import datetime
-from pathlib import Path
-
-from fastapi import UploadFile
-
-from core.config import DIRETORIO_DOCUMENTOS
-from core.logging_config import logger
+from collections import Counter
+from typing import Any
 
 
-TAMANHO_BLOCO = 8192  
+def calcular_estatisticas(documentos: list[dict[str, Any]]) -> dict:
+    total_documentos = len(documentos)
+    espaco_utilizado_bytes = sum(d.get("tamanho", 0) for d in documentos)
 
-
-def salvar_arquivo(arquivo: UploadFile, documento_id: int) -> dict:
-    """Salva o arquivo em disco e devolve os metadados calculados sobre ele."""
-    DIRETORIO_DOCUMENTOS.mkdir(parents=True, exist_ok=True)
-
-    nome_original = arquivo.filename
-    extensao = Path(nome_original).suffix
-    nome_armazenado = f"{documento_id}_{nome_original}"
-    caminho_destino = DIRETORIO_DOCUMENTOS / nome_armazenado
-
-    hash_sha256 = hashlib.sha256()
-    tamanho = 0
-
-    with open(caminho_destino, "wb") as destino:
-        while True:
-            pedaco = arquivo.file.read(TAMANHO_BLOCO)
-            if not pedaco:
-                break
-            destino.write(pedaco)
-            hash_sha256.update(pedaco)
-            tamanho += len(pedaco)
-
-    tipo_mime, _ = mimetypes.guess_type(nome_original)
-
-    logger.info(
-        "Arquivo salvo: id=%s, nome_armazenado=%s, tamanho=%d",
-        documento_id,
-        nome_armazenado,
-        tamanho,
-    )
+    por_extensao = Counter(d["extensao"].lstrip(".") for d in documentos)
+    por_categoria = Counter(d["categoria"] for d in documentos)
+    por_autor = Counter(d["autor"] for d in documentos)
 
     return {
-        "nome_original": nome_original,
-        "nome_armazenado": nome_armazenado,
-        "extensao": extensao,
-        "tipo_mime": tipo_mime,
-        "tamanho": tamanho,
-        "sha256": hash_sha256.hexdigest(),
-        "data_upload": datetime.now().isoformat(timespec="seconds"),
+        "total_documentos": total_documentos,
+        "espaco_utilizado_bytes": espaco_utilizado_bytes,
+        "por_extensao": dict(por_extensao),
+        "por_categoria": dict(por_categoria),
+        "por_autor": dict(por_autor),
     }
-
-
-def calcular_hash_atual(nome_armazenado: str) -> str | None:
-    """Recalcula o SHA-256 do arquivo físico atual. None se o arquivo sumiu."""
-    caminho = DIRETORIO_DOCUMENTOS / nome_armazenado
-
-    if not caminho.exists():
-        return None
-
-    hash_sha256 = hashlib.sha256()
-
-    with open(caminho, "rb") as file:
-        while True:
-            pedaco = file.read(TAMANHO_BLOCO)
-            if not pedaco:
-                break
-            hash_sha256.update(pedaco)
-
-    return hash_sha256.hexdigest()
-
-
-def remover_arquivo(nome_armazenado: str) -> bool:
-    """Apaga o arquivo físico. Devolve True se apagou, False se não existia."""
-    caminho = DIRETORIO_DOCUMENTOS / nome_armazenado
-
-    if not caminho.exists():
-        return False
-
-    caminho.unlink()
-    return True
-
-
-def caminho_do_arquivo(nome_armazenado: str) -> Path:
-    return DIRETORIO_DOCUMENTOS / nome_armazenado
