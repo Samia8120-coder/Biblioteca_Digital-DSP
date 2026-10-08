@@ -1,0 +1,53 @@
+Anotações Curso de Java do Nélio Alves
+
+
+
+* Variáveis: Uma variável é uma porção de memória (RAM) utilizada para armazenar dados durante a execução dos programas.
+* &#x20;Tipos primitivos em Java
+
+  * byte  8 bits -128 a 127
+  * short 16 bits -32768 a 32767
+  * int 32 bits -2147483648 a 2147483647
+  * long 64 bits -9223372036854770000 a 9223372036854770000
+  * float 32 bits -1,4024E-37 a 3,4028E+38
+  * double 64 bits -4,94E-307 a 1,779E+308
+  * char  16 bits '\\u0000' a '\\uFFFF'
+  * boolean 1 bit {false, true}
+* Nomes de variáveis
+
+  * Não pode começar com dígito: use uma letra ou \_
+  * Não pode ter espaço em branco
+  * Não usar acentos ou til
+  * Sugestão: use o padrão "camel case"
+* Como declarar uma variável: <tipo> <nome> = <atribuição (opcional)>;
+* saídas de dados/escrita
+
+  * Sem quebra de linha ao final - > System.out.print("Bom dia!");
+  * Com quebra de linha ao final -> System.out.println("Bom dia!");
+  * Para denominar as casas decimais -> System.out.printf("%.4f%n", x);
+  * Atenção: Para considerar o separador de decimais como ponto, ANTES da declaração do Scanner, faça: Locale.setDefault(Locele.US);
+  * Para concatenar vários elementos em um mesmo comando de escrita
+
+    * Regra geral para print e println: elemento1 + elemento2 + elemento3 ... + elemento
+    * Exemplo: System.out.println("RESULTADO = " + x + " METROS");
+* %f = ponto flutuante
+* %d = inteiro
+* %s texto
+* %n = quebra de linha
+* Casting é uma conversão explícita de dados, por exemplo: double num = 5.0; int number = (int) num; a saída seria -> 5 (sem casa decimal e não haveria perda de dados).
+* Para fazer entrada de dados:
+
+  * Scanner sc = new Scanner(System.in) e fecha com o sc.close();
+  * x = sc.next(); recebe uma string até a quebra de linha ou o espaço;
+  * x = sc..nextInt(); para ler um número inteiro;
+  * x = sc.nextDouble(); para ler um valor com ponto flutuante;
+  * x = sc.nextLine(); para ler texto até a quabra de linha;
+  * x = sc.next().charAt(0); para ler  caractere, o next() vai ler como String, o .charAt(0) seria uma função onde o valor zero indicaria que eu quero o primeiro caractere da string.
+* Como resolver a quebra de linha pendente ? Após ler um número e depois ler uma string, fica a quebra de linha pendente, para resolver tem que dar um "nextLine()" antes. Ou seja, fazer um nextLine() antes do nextLine() do meu interesse.
+* Funções matemáticas do Java: 
+
+  * A = Math.sqrt(x); Variável A recebe a raiz quadrada de x
+  * A = Math.pow(x, y); Variável A recebe o resultado de x elevado a y
+  * A = Math.abs(x); Variável A recebe o valor absoluto de x
+* 
+
