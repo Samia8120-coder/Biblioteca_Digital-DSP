@@ -20,9 +20,9 @@ class Documento(BaseModel):
 
 
 class DocumentoUpdate(BaseModel):
-    categoria: str | None = None
+    categoria: str | None = Field(default=None, min_length=2, max_length=50)
     descricao: str | None = None
-    titulo: str | None = None
-    autor: str | None = None
-    ano: int | None = None
+    titulo: str | None = Field(default=None, min_length=2, max_length=150)
+    autor: str | None = Field(default=None, min_length=2, max_length=100)
+    ano: int | None = Field(default=None, ge=1000, le=2100)
     editora: str | None = None
